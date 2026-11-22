@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "pulse_visual",
+  "version": "${version}",
+  "name": "Pulse Visual",
+  "description": "Визуальные модули: ESP, NameTags, Prediction, TargetESP, JumpCircles, Trails, Particles, HUD. Меню на Right Shift.",
+  "authors": ["Pulse"],
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": { "client": ["dev.pulse.PulseClient"] },
+  "depends": { "fabricloader": ">=0.16.0", "minecraft": "~1.21.11", "java": ">=21", "fabric-api": "*" }
+}
