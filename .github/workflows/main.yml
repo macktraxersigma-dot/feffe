@@ -1,27 +1,57 @@
+
 name: build
+
 on:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
+
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      # Получение исходного кода
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Установка Java 25 для Fabric Loom
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
-      - name: Подобрать актуальные версии
+          java-version: '25'
+
+      # Установка Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Подбор актуальных версий
+      - name: Resolve versions
         run: python3 tools/resolve_versions.py
-      - uses: gradle/actions/setup-gradle@v4
+
+      # Настройка Gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: current
-      - name: Сборка
+
+      # Сборка проекта
+      - name: Build
         run: gradle build --no-daemon --stacktrace
-      - uses: actions/upload-artifact@v4
+
+      # Загрузка готового JAR
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: pulse-visual-jar
           path: |
             build/libs/*.jar
             !build/libs/*-sources.jar
+          if-no-files-found: error
+          retention-days: 14
